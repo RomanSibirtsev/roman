@@ -1,0 +1,37 @@
+# Номер 1
+a = 6
+b = 7
+c = 1
+if b <= a >= c:
+    print(a)
+elif a <= b >= c:
+    print(b)
+else:
+    print(c)
+# Номер 2
+x = -1
+y = 1
+if abs(x) <= 1 and abs(y) <= 1:
+    print('Да')
+else:
+    print('Нет')
+# Номер 3
+x = -0.5
+y = 0.5
+if (x**2 + y**2) <= 1:
+    print('Да')
+else:
+    print('Нет')
+# Номер 4
+import math
+a = 1
+b = -4
+c = 4
+D = b**2 - 4*a*c
+if D > 0:
+    print(((-1*b + math.sqrt(D))/(2*a)))
+    print(((-1*b - math.sqrt(D))/(2*a)))
+elif D == 0:
+    print((-1*b)/(2*a))
+else:
+    print('Нет корней')
