@@ -1,4 +1,44 @@
+#Номер 1
 a = list(input())
 for i in range(len(a)):
-    if a[i] < 25 and a[i] % 4 == 0:
-        print(a[i])
+    if int(a[i]) < 25 and int(a[i]) % 4 == 0:
+        print(int(a[i]))
+#Номер 2
+a = list(input())
+b = 0
+k = 0
+for i in range(len(a)):
+    b += int(a[i])
+    k += 1
+print(b/k)
+#Номер 4
+a = list(input())
+sum = 0
+sum1 = 0
+k = 0
+for i in range(len(a)):
+    sum += int(a[i])
+    sum1 += int(a[i])**2
+    k += 1
+print((sum1 - 2 * (sum/k) * sum + len(a) * (sum/k)**2)/len(a))
+#Номер 5
+def sum(a,b,c):
+    return(a+b+c)
+#Номер 6
+def spisok(a):
+    min = 99999999
+    max = -99999999
+    for i in range(len(a)):
+        if int(a[i]) < min:
+            min = int(a[i])
+        if int(a[i]) > max:
+            max = int(a[i])
+    return(min + max)
+#Номер 7
+def stroka(b):
+    k = len(b)
+    for i in range(0,k):
+        print(b[len(b)-i-1])
+    return(17)
+
+
