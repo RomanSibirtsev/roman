@@ -1,0 +1,15 @@
+# Номер 1(2)
+def NOD(a,b):
+    max = 0
+    for i in range(max(a,b)):
+        if a%i == 0 and b % i == 0:
+            if max < i :
+                max = i;
+    return(max)
+#Номер 3
+import array
+a = []
+n=int(input())
+for i in range(n):
+    a.append(int(input()))
+print(sorted(a))
