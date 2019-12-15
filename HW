@@ -1,0 +1,30 @@
+# Номер 1
+a = {}
+n = int(input())
+for i in range(1,n+1):
+    if  i not in a:
+        a.setdefault(i,i*i,)
+print(a)
+# Номер 2
+d = {'a':123,'b':72,'c':-10}
+a = d.values()
+m = max(a)
+for i in d.keys():
+    if d[i] == m:
+        print(i)
+# Номер 3
+from collections import Counter
+d = {'a':72,'b':123,'c':-10}
+a = Counter(d)
+print(a)
+# Номер 4
+import re  # библиотека для обрезания текстов по разделителям
+
+alfa={}
+book = open("karenina.txt",encoding='utf-8')  # открываем файл
+text = book.read()  # помещаем в переменную text все содержимое файла
+for word in re.split("\W+", text):  # на каждой итерации цикла в word будет очередное слово
+    alfa[word.strip().lower()]=0 # слово желательно обрезать методом strip (чтобы не оказалось пробелов по бокам) и привести к нижнему регистру
+for word in re.split("\W+", text):
+    alfa[word.lower()] += 1
+print(Counter(alfa))
