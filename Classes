@@ -1,0 +1,94 @@
+import math
+class Prediction:
+    def __init__(self, numeration, denomiration):
+        self.numeration = numeration
+        self.denomiration = denomiration
+    def __str__(self):
+        return("{}/{}".format(self.numeration, self.denomiration ))
+    def __add__(self, other):
+        if type(other) == Prediction:
+            a = (self.denomiration*other.denomiration) // math.gcd(self.denomiration, other.denomiration)
+            self.numeration = a // self.denomiration * self.numeration + a // other.denomiration * other.numeration
+            result = Prediction(self.numeration , a)
+            return result
+        elif type(other) == int:
+            other = Prediction(other, 1)
+            return self + other
+    def __radd__(self,other):
+        return self + other
+    def __mul__(self,other):
+        if type(other)  == Prediction:
+            result = Prediction(self.numeration * other.numeration, self.denomiration * other.denomiration)
+            return result
+        elif type(other) == int:
+            result = Prediction(self.numeration * other, self.denomiration )
+            return result
+    def __rmul__(self, other):
+        return self * other
+    def __truediv__(self,other):
+        if type(other) == Prediction:
+            other.numeration,other.denomiration = other.denomiration,other.numeration
+            return self * other
+        elif type(other) == int:
+            result = Prediction(1,other)
+            return self * result
+    def __rtruediv__(self, other):
+        result = Prediction(1,other)
+        return self/result
+    def __pow__(self,other):
+        self.numeration = self.numeration**other
+        self.denomiration = self.denomiration**other
+        return self
+    def __float__(self):
+        self.denomiration = float(self.denomiration)
+        self.numeration = float(self.numeration)
+        return self
+class Circle:
+    def __inint__(self,x,y,r):
+        self.x = x
+        self.y = y
+        self.r = r
+    def __str__(self):
+        return("x  = {}  y = {}  r  = {}".format(self.x, self.y, self.r))
+    def translate(self,delta_x,delta_y):
+        self.x += delta_x
+        self.y += delta_y
+        return self
+    def scale(self,k):
+        self.r = k * self.r
+        return self
+    def chek(self,p_x,p_y):
+        if (p_x - self.x)**2 + (p_y - self.y)**2 <= self.r**2:
+            return True
+        else:
+            return False
+    def S(self):
+        return 3,14*self.r*self.r
+    def P(self):
+        return 2*3,14*self.r
+
+class Rectangle:
+    def __inint__(self,x,y,len_x,len_y):
+        self.x = x
+        self.y = y
+        self.len_x = len_x
+        self.len_y = len_y
+    def __str__(self):
+        return("x  = {}  y = {}  len x  = {}   len y = {}".format(self.x, self.y, self.len_x,self.len_y))
+    def translate(self,delta_x,delta_y):
+        self.x += delta_x
+        self.y += delta_y
+        return self
+    def scale(self,k):
+        self.len_x = k * self.len_x
+        self.len_y  = k * self.len_y
+        return self
+    def chek(self,p_x,p_y):
+        if p_x >= self.x - (self.len_x /2) and p_x <=  self.x + (self.len_x /2) and p_y >= self.y - (self.len_y /2) and p_y <=  self.y + (self.len_y /2):
+            return True
+        else:
+            return False
+    def S(self):
+        return self.len_x*self.len_y
+    def P(self):
+        return (self.len_x+self.len_y)*2
