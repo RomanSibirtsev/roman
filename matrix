@@ -1,0 +1,179 @@
+import copy
+class Matrix:
+    def __init__(self,body):
+        self.body  = body
+    def nrow(self):
+        return len(self.body)
+    def ncol(self):
+        return len(self.body[0])
+    def __str__(self):
+        for i in range(self.nrow()):
+            print(*self.body)
+        return ''
+    def __add__(self, other):
+        result = copy.deepcopy(self)
+        for k in range(self.nrow()):
+            for z in range(self.ncol()):
+                result.body[k][z] = self.body[k][z] + other.body[k][z]
+        return result
+    def __mul__(self, other):
+        result = copy.deepcopy(self)
+        if type(other) == int:
+            for k in range(self.nrow()):
+                for z in range(self.ncol()):
+                    result.body[k][z] = self.body[k][z]*other
+            return result
+        elif type(other) == Matrix:
+            for i in range(self.nrow()):
+                for j in range(self.ncol()):
+                    for n in range(self.nrow()):
+                        result.body[j][n] = self.body[j][n] * other.body[n][n]
+            return result
+    def __rmul__(self, other):
+        return self*other
+    def change_rows(self,i,j,inplace):
+        if inplace == True:
+            for k in range(self.ncol()):
+                self.body[i][k],self.body[j][k] = self.body[j][k],self.body[i][k]
+            return self
+        elif inplace == False:
+            new = copy.deepcopy(self)
+            for k in range(len(new)):
+                new.body[i][k],new.body[j][k] = new.body[j][k],new.body[i][k]
+            return new
+    def change_cols(self,i,j,inplace):
+        if inplace == True:
+            for k in range(self.nrow()):
+                self.body[k][i],self.body[k][j] = self.body[k][j],self.body[k][i]
+            return self.body
+        elif inplace == False:
+            new = copy.deepcopy(self)
+            for k in range(len(new)):
+                new.body[k][i],new.body[k][j] = new.body[k][j],new.body[k][i]
+            return new
+    def mul_row(self,k,i,inplace):
+        if inplace == True:
+            for j in range(self.ncol()):
+                self.body[i][j] *= k
+            return self.body
+        elif inplace == False:
+            new = copy.deepcopy(self)
+            for j in range(self.ncol()):
+                new.body[i][j] *= k
+            return new
+    def mul_col(self,k,i,inplace):
+        if inplace == True:
+            for j in range(self.nrow()):
+                self.body[j][i] *= k
+            return self
+        elif inplace == False:
+            new = copy.deepcopy(self)
+            for j in range(self.nrow()):
+                new.body[j][i] *= k
+            return new
+    def add_row(self,i,j,k,inplace):
+        if inplace == True:
+            j1 = self.mul_row(k,j,False)
+            for h in range(self.ncol()):
+                self.body[i][h] += j1.body[j][h]
+            return self
+        elif inplace == False:
+            result = copy.deepcopy(self)
+            j1 = self.mul_row(k, j, False)
+            for h in range(self.ncol()):
+                result.body[i][h] += j1.body[j][h]
+            return result
+    def add_col(self,i,j,k,inplace):
+        if inplace == True:
+            j1 = self.mul_col(k,j,False)
+            for h in range(self.nrow()):
+                self.body[h][i] += j1.body[h][j]
+            return self.body
+        elif inplace == False:
+            result = copy.deepcopy(self)
+            j1 = self.mul_col(k, j, False)
+            for h in range(self.nrow()):
+                result.body[h][i] += j1.body[h][j]
+            return result
+    def transport(self):
+        result = Matrix([[0 for i in range(self.nrow())] for i in range(self.ncol())])
+        for i in range(self.nrow()):
+            for j in range(self.ncol()):
+                result.body[j][i] = self.body[i][j]
+        return result
+    def track(self):
+        track = 0
+        if self.ncol() == self.nrow():
+            for i in range(self.ncol()):
+                track += self.body[i][i]
+            return track
+    def det(self):
+        result = 1
+        a = copy.deepcopy(self)
+        for i in range(a.nrow()):
+            for k in range(i + 1, a.nrow()):
+                if a.body[i][i] != 0:
+                    # print(k,' kk')
+                    z = a.body[k][i] / a.body[i][i]
+                    # print(z,' zz')
+                    a.add_row(k, i, -1 * z, True)
+        for i in range(a.nrow() - 1, 0, -1):
+            for k in range(i - 1, -1, -1):
+                if a.body[i][i] != 0:
+                    z = a.body[k][i] / a.body[i][i]
+                    a.add_row(k, i, -1 * z, True)
+        for i in range(a.nrow()):
+            result *= a.body[i][i]
+        return result
+    def inverse(self):
+        a = copy.deepcopy(self)
+        b = Matrix([[1,0,0],[0,1,0],[0,0,1]])
+        if a.det() != 0:
+            for i in range(a.nrow()):
+                for k in range(i + 1, a.nrow()):
+                    if a.body[i][i] != 0:
+                        z = a.body[k][i] / a.body[i][i]
+                        a.add_row(k, i, -1 * z, True)
+                        b.add_row(k, i, -1 * z, True)
+            for i in range(a.nrow() - 1, 0, -1):
+                for k in range(i - 1, -1, -1):
+                    if a.body[i][i] != 0:
+                        z = a.body[k][i] / a.body[i][i]
+                        a.add_row(k, i, -1 * z, True)
+                        b.add_row(k, i, -1 * z, True)
+            return b
+
+def solve_lineal_system(self,other):
+    a = copy.deepcopy(self)
+    b = copy.deepcopy(other)
+    p = True
+    for i in range(a.nrow()):
+        for k in range(i + 1, a.nrow()):
+            if a.body[i][i] != 0:
+
+                z = a.body[k][i] / a.body[i][i]
+                a.add_row(k, i, -1 * z, True)
+                b[k] -= b[i] * z
+    for i in range(a.nrow() - 1, 0, -1):
+        for k in range(i - 1, -1, -1):
+            if a.body[i][i] != 0:
+                z = a.body[k][i] / a.body[i][i]
+                a.add_row(k, i, -1 * z, True)
+                b[k] -= b[i] * z
+    for i in range(a.nrow()):
+        if a.body[i][i] == 0:
+            print('Нет единственного решения')
+            p = False
+    if p == True:
+        for i in range(a.nrow()):
+            b[i] /= a.body[i][i]
+        return b
+    else:
+        return''
+
+
+a = Matrix([[0,4,1],[4,2,1],[2,1,1]])
+#b = Matrix([[1,2,3],[4,5,6],[7,8,9]])
+b = [7,3,1]
+c = Matrix([[1,0],[0,1]])
+print(solve_lineal_system(a,b))
