@@ -1,0 +1,48 @@
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+import numpy as np
+#import matplotilb.pyplot as plt
+
+dataset = load_iris()
+X = dataset["data"]
+y = dataset["target"]
+k = 10
+neighbors = []
+
+def nearest_neighbor_classifier(X, y, x):
+    neighbors = []
+    for j in range(k):
+        minimal_index = 0
+        minimal_dist = None
+        for i in range(len(X)):
+            dist = calc_distance(x, X[i])
+            if minimal_dist == None or dist < minimal_dist :
+                minimal_index = i
+                minimal_dist = dist
+        neighbors.append(y[minimal_index])
+        np.delete(X, minimal_index)
+    max_index = 0
+    max_count = 0
+    for i in range(len(neighbors)):
+        if neighbors.count(neighbors[i]) > max_count:
+            max_count = neighbors.count(neighbors[i])
+            max_index = i
+    return neighbors[max_index]
+
+
+def calc_distance(u, v):
+    return np.sqrt(np.sum((u - v)**2))
+
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.20)
+
+hits = 0
+for i in range(len(X_test)):
+    x = X_test[i]
+    y_true = y_test[i]  
+    y_pred = nearest_neighbor_classifier(X_train, y_train, x)
+    
+    if y_true == y_pred:
+        hits += 1
+
+print("{} out of {} are correct".format(hits, len(X_test)))
