@@ -26,11 +26,13 @@ def calc_distance(u, v):
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.20)
 
 hits = 0
+percent = [0 for x in range(3)]
 for i in range(len(X_test)):
     x = X_test[i]
     y_true = y_test[i]
     y_pred ,chance = nearest_neighbor_classifier(X_train, y_train, x, k)
-    percent = chance[1]/k*100
+    for j in range(len(chance)):
+        percent[j] = chance[j]/k
     print(percent)
     if y_true == y_pred:
         hits += 1
