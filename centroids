@@ -1,0 +1,47 @@
+from sklearn.datasets import load_wine
+from sklearn.model_selection import train_test_split
+import numpy as np
+#import matplotilb.pyplot as plt
+
+dataset = load_wine()
+X = dataset["data"]
+y = dataset["target"]
+neighbors = []
+
+def nearest_neighbor_classifier(X, y, x):
+    neighbors = []
+    minimal_index = 0
+    minimal_dist = None
+    for i in range(len(x_test2)):
+        dist = calc_distance(x, x_test2[i])
+        if minimal_dist == None or dist < minimal_dist :
+            minimal_index = i
+            minimal_dist = dist
+    return minimal_index
+
+
+def calc_distance(u, v):
+    return np.sqrt(np.sum((u - v)**2))
+
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.20)
+k = 0
+x_test2 = [[1 for x in range(len(X[0]))] for x in range(3)]
+for i in range(len(X_train[0])):
+    for x in range(len(X_train)):
+        x_test2[y_train[x]][i] += X_train[x][i]
+        k += 1
+for i in range(len(x_test2[0])):
+    for x in range(len(x_test2)):
+        x_test2[x][i] /= np.count_nonzero(y_train == y_train[i])
+
+hits = 0
+for i in range(len(X_test)):
+    x = X_test[i]
+    y_true = y_test[i]  
+    y_pred = nearest_neighbor_classifier(X_train, y_train, x)
+    
+    if y_true == y_pred:
+        hits += 1
+print("{} out of {} are correct".format(hits, len(X_test)))
+
