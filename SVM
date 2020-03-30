@@ -5,10 +5,7 @@ import matplotlib.pyplot as plt
 from sklearn.svm import SVC
 
 def polynom(x, theta):
-    # Polynom with coefficients list theta
-    # Jedi way
     return sum([theta[i] * x**i for i in range(len(theta))])
-    # Noob way
     result = 0
     for i in range(len(theta)):
         result += theta[i] * x**i
@@ -37,14 +34,11 @@ a = -2
 b = 2
 X = np.array([[y_train[i]**j for j in range(K + 1)] for i in range(N)])
 y = np.array(y_pred)
-# Overflow...
-#theta = np.linalg.inv(X.T @ X) @ X.T @ y
-# Good solution
 theta = np.linalg.lstsq(X, y, rcond=None)[0]
 
 print(theta)
 
-# Draw estimated curve
+
 xs_draw = np.arange(a, b, 0.01)
 ys_draw = [polynom(x, theta) for x in xs_draw]
 plt.plot(xs_draw, ys_draw)
