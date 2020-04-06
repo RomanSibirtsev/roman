@@ -1,0 +1,17 @@
+from sklearn.datasets import load_digits
+from sklearn.model_selection import RepeatedStratifiedKFold
+import numpy as np
+from sklearn.cluster import KMeans
+from sklearn.metrics.cluster import adjusted_rand_score
+
+dataset = load_digits()
+X = dataset["data"]
+y = dataset["target"]
+print(X)
+print(y)
+
+kmeans = KMeans(n_clusters=10).fit(X)
+all_predictions = kmeans.predict(X)
+
+print(all_predictions)
+print(adjusted_rand_score(all_predictions, y))
