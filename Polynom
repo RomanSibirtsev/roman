@@ -64,14 +64,14 @@ class Polynom:
     def __mod__(self, other):
         return self.__divmod__(other)[1]
 
-def derivative(self):
-    newlist = Polynom([i for i in range(len(self.coeffs)-1)])
-    for i in range(len(newlist.coeffs)):
-        newlist.coeffs[i] = self.coeffs[i+1]*(i+1)
-    return(newlist)
+    def derivative(self):
+        newlist = Polynom([i for i in range(len(self.coeffs)-1)])
+        for i in range(len(newlist.coeffs)):
+            newlist.coeffs[i] = self.coeffs[i+1]*(i+1)
+        return(newlist)
 
-def remove_multiplicity_of_roots(self):
-    return(self//gdc(derivative(self),self))
+    def remove_multiplicity_of_roots(self):
+        return(self//gdc(derivative(self),self))
 
 def gdc(p1, p2):
     while len(p1.coeffs) != 0 and len(p2.coeffs) != 0 :
