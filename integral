@@ -1,0 +1,62 @@
+import numpy as np
+from sympy import*
+import random
+import matplotlib.pyplot as plt
+def S1(fun, x0, x1, n):
+    x = Symbol('x')
+    S = 0
+    X = np.linspace(x0, x1, n)
+    for i in range(n):
+        Y = fun.evalf(subs={x: X[i]})
+        S += Y
+    return( S * (x1-x0) / n )
+def S2(fun, x0, x1, n):
+    x = Symbol('x')
+    S = 0
+    X = np.linspace(x0, x1, n)
+    for i in range(1, n):
+        Y = fun.evalf(subs={x: X[i]})
+        S += Y
+    return(((x1 - x0)/ n)*(fun.evalf(subs={x: x0})/2 + S + fun.evalf(subs={x: x1})/2 ))
+def S3(fun, x0, x1, n):
+    x = Symbol('x')
+    S = 0
+    ymax = 2 # только для 2/(1+x^2)
+    X = np.array([random.uniform(x0, x1) for i in range(n)])
+    Y = np.array([random.uniform(0, ymax) for i in range(n)])
+    for i in range(n):
+        if Y[i] <= fun.evalf(subs={x: X[i]}):
+            S += 1
+    return((x1-x0)*ymax*S/n)
+def err1(N):
+    x = Symbol('x')
+    f = 2 / (1 + x ** 2)
+    return abs(S1(f, -1, 1, N) - np.pi)
+def err2(N):
+    x = Symbol('x')
+    f = 2 / (1 + x ** 2)
+    return abs(S2(f, -1, 1, N) - np.pi)
+def err3(N):
+    x = Symbol('x')
+    f = 2 / (1 + x ** 2)
+    return abs(S3(f, -1, 1, N) - np.pi)
+
+x = Symbol('x')
+f = 2/(1+x**2)
+n = 5
+#print(S1(f, -1, 1, 10**n))
+#print(S2(f, -1, 1, 10**n))
+#print(S3(f, -1, 1, 10**n))
+Y1 = []
+Y2 = []
+Y3 = []
+X = 10**np.linspace(1, n, n)
+for i in range(n):
+    Y1.append(err1(int(X[i])))
+    Y2.append(err2(int(X[i])))
+    Y3.append(err3(int(X[i])))
+plt.plot(X, Y1)
+plt.plot(X, Y2)
+plt.plot(X, Y3)
+plt.xscale('log')
+plt.show()
